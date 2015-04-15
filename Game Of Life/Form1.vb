@@ -21,6 +21,20 @@
             Me.lbColor2.BackColor = My.Settings.CellColor2
         End If
 
+        If My.Settings.CellSize <> 0 Then
+            If My.Settings.CellSize > Me.trkCellSize.Maximum Then
+                Me.trkCellSize.Value = Me.trkCellSize.Maximum
+                Me.mGrid.CellSize = Me.trkCellSize.Maximum
+            Else
+                Me.trkCellSize.Value = My.Settings.CellSize
+                Me.mGrid.CellSize = My.Settings.CellSize
+            End If
+
+        End If
+        If My.Settings.Speed <> 0 Then
+            Me.trkSpeed.Value = My.Settings.Speed
+        End If
+
 
         'Setup
         Me.mGrid.BackColor = Color.Transparent
@@ -46,6 +60,8 @@
         My.Settings.GridForeColor = Me.lbGridLines.BackColor
         My.Settings.CellColor1 = Me.lbColor1.BackColor
         My.Settings.CellColor2 = Me.lbColor2.BackColor
+        My.Settings.CellSize = Me.trkCellSize.Value
+        My.Settings.Speed = Me.trkSpeed.Value
     End Sub
 #End Region
 
@@ -236,6 +252,5 @@
         Me.mCurrentCoordinates = New Point(x, y)
         Me.mGrid.CurrentCoordinates = Me.mCurrentCoordinates
     End Sub
-
 
 End Class

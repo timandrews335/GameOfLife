@@ -101,6 +101,30 @@ Namespace My
                 Me("CellColor2") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property Speed() As Integer
+            Get
+                Return CType(Me("Speed"),Integer)
+            End Get
+            Set
+                Me("Speed") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property CellSize() As Integer
+            Get
+                Return CType(Me("CellSize"),Integer)
+            End Get
+            Set
+                Me("CellSize") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

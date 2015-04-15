@@ -14,5 +14,11 @@
     <Setting Name="CellColor2" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">192, 0, 192</Value>
     </Setting>
+    <Setting Name="Speed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CellSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
