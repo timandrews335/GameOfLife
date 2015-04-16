@@ -14,7 +14,7 @@
 #Region "Form Loading and Unloading"
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         'Load in the colors that the user chose last time.  If this is the first run, then pick some defaults
-        If Not My.Settings.GridBackColor.Equals(My.Settings.GridForeColor) Then
+        If Not My.Settings.GridBackColor.Equals(My.Settings.GridForeColor) Or Not My.Settings.GridBackColor.Equals(My.Settings.CellColor1) Or Not My.Settings.GridBackColor.Equals(My.Settings.GridForeColor) Then
             Me.lbGridBackground.BackColor = My.Settings.GridBackColor
             Me.lbGridLines.BackColor = My.Settings.GridForeColor
             Me.lbColor1.BackColor = My.Settings.CellColor1
@@ -253,4 +253,9 @@
         Me.mGrid.CurrentCoordinates = Me.mCurrentCoordinates
     End Sub
 
+
+    Private Sub rbSquareCells_CheckedChanged(sender As Object, e As EventArgs) Handles rbSquareCells.CheckedChanged, rbCircularCells.CheckedChanged
+        Me.mGrid.Circle = rbCircularCells.Checked
+        Me.mGrid.Refresh()
+    End Sub
 End Class

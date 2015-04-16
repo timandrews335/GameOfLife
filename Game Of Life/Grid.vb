@@ -20,6 +20,9 @@ Public Class Grid
     Private mFalseType As Color
     Private mTrueType As Color
 
+    'Grid Shape
+    Private mCircle As Boolean = False
+
     'Array for live/dead color1/color2 on the grid
     Private mGridBoard As Boolean(,)
     Private mColorBoard As Boolean(,)
@@ -92,7 +95,13 @@ Public Class Grid
                         End If
                         'Draw the cell
 
-                        g.FillRectangle(b, w * Me.mCellSize, h * Me.mCellSize, Me.mCellSize, Me.mCellSize)
+                        If Not mCircle Then
+                            g.FillRectangle(b, w * Me.mCellSize, h * Me.mCellSize, Me.mCellSize, Me.mCellSize)
+                        Else
+
+                            g.FillEllipse(b, w * Me.mCellSize, h * Me.mCellSize, Me.mCellSize, Me.mCellSize)
+                        End If
+
                     End If
 
 
@@ -180,6 +189,14 @@ Public Class Grid
         Set(value)
             Me.mCurrentCoordinates = value
             Me.Invalidate()
+        End Set
+    End Property
+    Friend Property Circle As Boolean
+        Get
+            Return Me.mCircle
+        End Get
+        Set(value As Boolean)
+            Me.mCircle = value
         End Set
     End Property
 End Class

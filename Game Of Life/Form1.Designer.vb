@@ -23,6 +23,8 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.rbCircularCells = New System.Windows.Forms.RadioButton()
+        Me.rbSquareCells = New System.Windows.Forms.RadioButton()
         Me.lblTim = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.nudCellAxisLength = New System.Windows.Forms.NumericUpDown()
@@ -60,6 +62,8 @@ Partial Class Form1
         Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel1.Controls.Add(Me.rbCircularCells)
+        Me.Panel1.Controls.Add(Me.rbSquareCells)
         Me.Panel1.Controls.Add(Me.lblTim)
         Me.Panel1.Controls.Add(Me.Label8)
         Me.Panel1.Controls.Add(Me.nudCellAxisLength)
@@ -86,6 +90,28 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(763, 131)
         Me.Panel1.TabIndex = 0
         '
+        'rbCircularCells
+        '
+        Me.rbCircularCells.AutoSize = True
+        Me.rbCircularCells.Location = New System.Drawing.Point(275, 66)
+        Me.rbCircularCells.Name = "rbCircularCells"
+        Me.rbCircularCells.Size = New System.Drawing.Size(56, 17)
+        Me.rbCircularCells.TabIndex = 17
+        Me.rbCircularCells.Text = "Circles"
+        Me.rbCircularCells.UseVisualStyleBackColor = True
+        '
+        'rbSquareCells
+        '
+        Me.rbSquareCells.AutoSize = True
+        Me.rbSquareCells.Checked = True
+        Me.rbSquareCells.Location = New System.Drawing.Point(145, 66)
+        Me.rbSquareCells.Name = "rbSquareCells"
+        Me.rbSquareCells.Size = New System.Drawing.Size(84, 17)
+        Me.rbSquareCells.TabIndex = 16
+        Me.rbSquareCells.TabStop = True
+        Me.rbSquareCells.Text = "Square Cells"
+        Me.rbSquareCells.UseVisualStyleBackColor = True
+        '
         'lblTim
         '
         Me.lblTim.AutoSize = True
@@ -100,7 +126,7 @@ Partial Class Form1
         Me.Label8.Location = New System.Drawing.Point(10, 50)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(89, 13)
-        Me.Label8.TabIndex = 15
+        Me.Label8.TabIndex = 14
         Me.Label8.Text = "# cells on an axis"
         '
         'nudCellAxisLength
@@ -111,7 +137,7 @@ Partial Class Form1
         Me.nudCellAxisLength.Minimum = New Decimal(New Integer() {50, 0, 0, 0})
         Me.nudCellAxisLength.Name = "nudCellAxisLength"
         Me.nudCellAxisLength.Size = New System.Drawing.Size(106, 22)
-        Me.nudCellAxisLength.TabIndex = 16
+        Me.nudCellAxisLength.TabIndex = 15
         Me.nudCellAxisLength.Value = New Decimal(New Integer() {120, 0, 0, 0})
         '
         'trkCellSize
@@ -121,7 +147,7 @@ Partial Class Form1
         Me.trkCellSize.Minimum = 3
         Me.trkCellSize.Name = "trkCellSize"
         Me.trkCellSize.Size = New System.Drawing.Size(104, 45)
-        Me.trkCellSize.TabIndex = 14
+        Me.trkCellSize.TabIndex = 13
         Me.trkCellSize.Value = 6
         '
         'Label7
@@ -130,7 +156,7 @@ Partial Class Form1
         Me.Label7.Location = New System.Drawing.Point(602, 4)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(47, 13)
-        Me.Label7.TabIndex = 13
+        Me.Label7.TabIndex = 12
         Me.Label7.Text = "Cell Size"
         '
         'lbCounter
@@ -140,14 +166,14 @@ Partial Class Form1
         Me.lbCounter.Location = New System.Drawing.Point(408, 94)
         Me.lbCounter.Name = "lbCounter"
         Me.lbCounter.Size = New System.Drawing.Size(348, 23)
-        Me.lbCounter.TabIndex = 20
+        Me.lbCounter.TabIndex = 21
         '
         'trkSpeed
         '
         Me.trkSpeed.Location = New System.Drawing.Point(489, 3)
         Me.trkSpeed.Name = "trkSpeed"
         Me.trkSpeed.Size = New System.Drawing.Size(104, 45)
-        Me.trkSpeed.TabIndex = 12
+        Me.trkSpeed.TabIndex = 11
         Me.trkSpeed.Value = 7
         '
         'Label5
@@ -166,7 +192,7 @@ Partial Class Form1
         Me.btnResume.Location = New System.Drawing.Point(275, 94)
         Me.btnResume.Name = "btnResume"
         Me.btnResume.Size = New System.Drawing.Size(127, 23)
-        Me.btnResume.TabIndex = 19
+        Me.btnResume.TabIndex = 20
         Me.btnResume.Text = "Resume Universe"
         Me.btnResume.UseVisualStyleBackColor = True
         '
@@ -249,7 +275,7 @@ Partial Class Form1
         Me.btnStop.Location = New System.Drawing.Point(142, 94)
         Me.btnStop.Name = "btnStop"
         Me.btnStop.Size = New System.Drawing.Size(127, 23)
-        Me.btnStop.TabIndex = 18
+        Me.btnStop.TabIndex = 19
         Me.btnStop.Text = "Stop Universe"
         Me.btnStop.UseVisualStyleBackColor = True
         '
@@ -279,7 +305,7 @@ Partial Class Form1
         Me.btnStart.Location = New System.Drawing.Point(9, 94)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(127, 23)
-        Me.btnStart.TabIndex = 17
+        Me.btnStart.TabIndex = 18
         Me.btnStart.Text = "Start Universe"
         Me.btnStart.UseVisualStyleBackColor = True
         '
@@ -291,7 +317,7 @@ Partial Class Form1
         Me.VScrollBar1.Maximum = 109
         Me.VScrollBar1.Name = "VScrollBar1"
         Me.VScrollBar1.Size = New System.Drawing.Size(17, 304)
-        Me.VScrollBar1.TabIndex = 22
+        Me.VScrollBar1.TabIndex = 2
         '
         'HScrollBar1
         '
@@ -301,7 +327,7 @@ Partial Class Form1
         Me.HScrollBar1.Maximum = 109
         Me.HScrollBar1.Name = "HScrollBar1"
         Me.HScrollBar1.Size = New System.Drawing.Size(746, 17)
-        Me.HScrollBar1.TabIndex = 23
+        Me.HScrollBar1.TabIndex = 3
         '
         'GroupBox1
         '
@@ -312,7 +338,7 @@ Partial Class Form1
         Me.GroupBox1.Location = New System.Drawing.Point(1, 135)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(743, 301)
-        Me.GroupBox1.TabIndex = 21
+        Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Universe"
         '
@@ -365,5 +391,7 @@ Partial Class Form1
     Friend WithEvents HScrollBar1 As System.Windows.Forms.HScrollBar
     Friend WithEvents lblTim As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents rbCircularCells As System.Windows.Forms.RadioButton
+    Friend WithEvents rbSquareCells As System.Windows.Forms.RadioButton
 
 End Class
