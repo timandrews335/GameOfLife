@@ -132,6 +132,7 @@ Public Class Universe
 
     End Sub
 
+    'Properties
     Friend ReadOnly Property Width
         Get
             Return Me.mCurrentState.GetLength(0) - 1
