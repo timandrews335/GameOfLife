@@ -22,7 +22,15 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.txtSurvive = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.txtBirth = New System.Windows.Forms.TextBox()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.nudStableCount = New System.Windows.Forms.NumericUpDown()
+        Me.btnRecap = New System.Windows.Forms.Button()
         Me.rbCircularCells = New System.Windows.Forms.RadioButton()
         Me.rbSquareCells = New System.Windows.Forms.RadioButton()
         Me.lblTim = New System.Windows.Forms.Label()
@@ -51,6 +59,7 @@ Partial Class Form1
         Me.HScrollBar1 = New System.Windows.Forms.HScrollBar()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1.SuspendLayout()
+        CType(Me.nudStableCount, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nudCellAxisLength, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkCellSize, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkSpeed, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -62,6 +71,13 @@ Partial Class Form1
         Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel1.Controls.Add(Me.txtSurvive)
+        Me.Panel1.Controls.Add(Me.Label11)
+        Me.Panel1.Controls.Add(Me.txtBirth)
+        Me.Panel1.Controls.Add(Me.Label10)
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Controls.Add(Me.nudStableCount)
+        Me.Panel1.Controls.Add(Me.btnRecap)
         Me.Panel1.Controls.Add(Me.rbCircularCells)
         Me.Panel1.Controls.Add(Me.rbSquareCells)
         Me.Panel1.Controls.Add(Me.lblTim)
@@ -90,10 +106,73 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(763, 131)
         Me.Panel1.TabIndex = 0
         '
+        'txtSurvive
+        '
+        Me.txtSurvive.Location = New System.Drawing.Point(599, 68)
+        Me.txtSurvive.Name = "txtSurvive"
+        Me.txtSurvive.Size = New System.Drawing.Size(55, 20)
+        Me.txtSurvive.TabIndex = 24
+        Me.txtSurvive.Text = "23"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(579, 75)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(14, 13)
+        Me.Label11.TabIndex = 23
+        Me.Label11.Text = "S"
+        '
+        'txtBirth
+        '
+        Me.txtBirth.Location = New System.Drawing.Point(509, 68)
+        Me.txtBirth.Name = "txtBirth"
+        Me.txtBirth.Size = New System.Drawing.Size(55, 20)
+        Me.txtBirth.TabIndex = 22
+        Me.txtBirth.Text = "3"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(489, 74)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(14, 13)
+        Me.Label10.TabIndex = 21
+        Me.Label10.Text = "B"
+        '
+        'Label9
+        '
+        Me.Label9.Location = New System.Drawing.Point(291, 57)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(113, 31)
+        Me.Label9.TabIndex = 18
+        Me.Label9.Text = "$ generations for stable pop. (0 for all)"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'nudStableCount
+        '
+        Me.nudStableCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.nudStableCount.Location = New System.Drawing.Point(408, 66)
+        Me.nudStableCount.Maximum = New Decimal(New Integer() {1000000, 0, 0, 0})
+        Me.nudStableCount.Name = "nudStableCount"
+        Me.nudStableCount.Size = New System.Drawing.Size(64, 22)
+        Me.nudStableCount.TabIndex = 19
+        Me.nudStableCount.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        '
+        'btnRecap
+        '
+        Me.btnRecap.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnRecap.Location = New System.Drawing.Point(678, 68)
+        Me.btnRecap.Name = "btnRecap"
+        Me.btnRecap.Size = New System.Drawing.Size(78, 23)
+        Me.btnRecap.TabIndex = 25
+        Me.btnRecap.Text = "Recap"
+        Me.btnRecap.UseVisualStyleBackColor = True
+        '
         'rbCircularCells
         '
         Me.rbCircularCells.AutoSize = True
-        Me.rbCircularCells.Location = New System.Drawing.Point(275, 66)
+        Me.rbCircularCells.Location = New System.Drawing.Point(229, 66)
         Me.rbCircularCells.Name = "rbCircularCells"
         Me.rbCircularCells.Size = New System.Drawing.Size(56, 17)
         Me.rbCircularCells.TabIndex = 17
@@ -104,7 +183,7 @@ Partial Class Form1
         '
         Me.rbSquareCells.AutoSize = True
         Me.rbSquareCells.Checked = True
-        Me.rbSquareCells.Location = New System.Drawing.Point(145, 66)
+        Me.rbSquareCells.Location = New System.Drawing.Point(139, 66)
         Me.rbSquareCells.Name = "rbSquareCells"
         Me.rbSquareCells.Size = New System.Drawing.Size(84, 17)
         Me.rbSquareCells.TabIndex = 16
@@ -118,7 +197,7 @@ Partial Class Form1
         Me.lblTim.Location = New System.Drawing.Point(433, 50)
         Me.lblTim.Name = "lblTim"
         Me.lblTim.Size = New System.Drawing.Size(0, 13)
-        Me.lblTim.TabIndex = 22
+        Me.lblTim.TabIndex = 20
         '
         'Label8
         '
@@ -166,7 +245,7 @@ Partial Class Form1
         Me.lbCounter.Location = New System.Drawing.Point(408, 94)
         Me.lbCounter.Name = "lbCounter"
         Me.lbCounter.Size = New System.Drawing.Size(348, 23)
-        Me.lbCounter.TabIndex = 21
+        Me.lbCounter.TabIndex = 29
         '
         'trkSpeed
         '
@@ -192,7 +271,7 @@ Partial Class Form1
         Me.btnResume.Location = New System.Drawing.Point(275, 94)
         Me.btnResume.Name = "btnResume"
         Me.btnResume.Size = New System.Drawing.Size(127, 23)
-        Me.btnResume.TabIndex = 20
+        Me.btnResume.TabIndex = 28
         Me.btnResume.Text = "Resume Universe"
         Me.btnResume.UseVisualStyleBackColor = True
         '
@@ -275,7 +354,7 @@ Partial Class Form1
         Me.btnStop.Location = New System.Drawing.Point(142, 94)
         Me.btnStop.Name = "btnStop"
         Me.btnStop.Size = New System.Drawing.Size(127, 23)
-        Me.btnStop.TabIndex = 19
+        Me.btnStop.TabIndex = 27
         Me.btnStop.Text = "Stop Universe"
         Me.btnStop.UseVisualStyleBackColor = True
         '
@@ -305,7 +384,7 @@ Partial Class Form1
         Me.btnStart.Location = New System.Drawing.Point(9, 94)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(127, 23)
-        Me.btnStart.TabIndex = 18
+        Me.btnStart.TabIndex = 26
         Me.btnStart.Text = "Start Universe"
         Me.btnStart.UseVisualStyleBackColor = True
         '
@@ -352,12 +431,14 @@ Partial Class Form1
         Me.Controls.Add(Me.HScrollBar1)
         Me.Controls.Add(Me.VScrollBar1)
         Me.Controls.Add(Me.Panel1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Game of Life - Tim Andrews"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.nudStableCount, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nudCellAxisLength, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.trkCellSize, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.trkSpeed, System.ComponentModel.ISupportInitialize).EndInit()
@@ -393,5 +474,12 @@ Partial Class Form1
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents rbCircularCells As System.Windows.Forms.RadioButton
     Friend WithEvents rbSquareCells As System.Windows.Forms.RadioButton
+    Friend WithEvents btnRecap As System.Windows.Forms.Button
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents nudStableCount As System.Windows.Forms.NumericUpDown
+    Friend WithEvents txtSurvive As System.Windows.Forms.TextBox
+    Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents txtBirth As System.Windows.Forms.TextBox
+    Friend WithEvents Label10 As System.Windows.Forms.Label
 
 End Class

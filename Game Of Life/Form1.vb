@@ -170,12 +170,18 @@
         Call UpdateStatus()
 
         'The speed on the form is expressed between 0 and 10.  At its lowest speed, we have one generation per second
-        If (10 - Me.trkSpeed.Value) * 100 > 0 Then Threading.Thread.Sleep((10 - Me.trkSpeed.Value) * 100)
+        Try
+            If (10 - Me.trkSpeed.Value) * 100 > 0 Then Threading.Thread.Sleep((10 - Me.trkSpeed.Value) * 100)
+        Catch so As StackOverflowException
+        Catch ex As Exception
+        End Try
+
+
     End Sub
 
     Private Sub UpdateStatus()
         Try
-            Me.lbCounter.Text = Format(Me.mGenerations, "###,###") & " generations.  " & Format(Me.mLivingCells, "###,###") & " living cells.  (" & Me.mCurrentCoordinates.X.ToString & ", " & Me.mCurrentCoordinates.Y.ToString & ")."
+            If Me.WindowState <> FormWindowState.Minimized Then Me.lbCounter.Text = Me.mGenerations.ToString("###,###") & " generations.  " & Me.mLivingCells.ToString("###,###") & " living cells. "
         Catch ex As Exception
 
         End Try
@@ -186,7 +192,11 @@
         Me.btnStop.Enabled = True
         Me.mGenerations = 0
         StartUniverse()
+        Me.mUniverse.GenerationStabilityIndicator = Me.nudStableCount.Value
+        Me.mUniverse.BirthNeighborCount = Me.txtBirth.Text.Trim
+        Me.mUniverse.SurviveNeighborCount = Me.txtSurvive.Text.Trim
         Me.mUniverse.Simulate(Me.mInitialSeed, Me.mInitialType)
+
     End Sub
 
 
@@ -258,4 +268,16 @@
         Me.mGrid.Circle = rbCircularCells.Checked
         Me.mGrid.Refresh()
     End Sub
+
+    Private Sub btnRecap_Click(sender As Object, e As EventArgs) Handles btnRecap.Click
+        Dim f As New FormRecap
+        f.TextBox1.Text &= "Generations" & ControlChars.Tab & "Cells Alive" & Environment.NewLine
+        For i As Integer = 0 To Me.mUniverse.LivingCellList.count - 1
+            f.TextBox1.Text &= i.ToString & ControlChars.Tab & Me.mUniverse.LivingCellList(i).ToString & Environment.NewLine
+        Next
+        f.ShowDialog()
+    End Sub
+
+
+ 
 End Class
