@@ -50,6 +50,137 @@ Public Class Universe
         Me.mLivingCellList.Clear()
     End Sub
 
+    Private Sub DoWork()
+        Dim Stable As Boolean = False
+        While Not Stable
+            'If our population has been stable for at least N generations, then stop the simulation
+            CurrentPopulation = 0
+            PriorPopulation = 0
+            Stable = True
+
+            If (Me.mGenerationStabilityIndicator = 0) Then
+                Stable = False
+
+            ElseIf Me.mLivingCellList.Count > Me.mGenerationStabilityIndicator Then
+                For i As Integer = Me.mLivingCellList.Count - 1 To Me.mLivingCellList.Count - Me.mGenerationStabilityIndicator Step -1
+                    CurrentPopulation = Me.mLivingCellList(i)
+                    If (CurrentPopulation <> PriorPopulation And PriorPopulation <> 0) Then
+                        Stable = False
+                    End If
+                    PriorPopulation = CurrentPopulation
+                Next
+            Else
+                Stable = False
+            End If
+            If Me.mStopped Then Stable = True 'Did the user manually stop the simulation
+            If Stable Then
+                Me.mStopped = True
+                Exit Sub
+            End If
+
+
+            'Let the calling application render the output of the CurrentState and CurrentType
+            RaiseEvent Tick(Me.mCurrentState, Me.mCurrentType, Me.mLivingCells)
+            Me.mLivingCellList.Add(Me.mLivingCells)
+
+
+            xMin = 1
+            yMin = 1
+            xMax = Me.mCurrentState.GetLength(0) - 2
+            yMax = Me.mCurrentState.GetLength(1) - 2
+
+            mLivingCells = 0
+
+            'Let's see if the cells live or die
+            For x As Integer = 0 To xMax
+                For y As Integer = 0 To yMax
+
+                    'Count the number of neighbors that are alive
+                    LivingNeighbors = 0
+                    TypedNeighbors = 0
+
+                    If x <= xMax AndAlso Me.mCurrentState(x + 1, y) Then
+                        LivingNeighbors += 1 'East
+                        If Me.mCurrentType(x + 1, y) Then TypedNeighbors += 1
+                    End If
+
+                    If x >= xMin AndAlso Me.mCurrentState(x - 1, y) Then
+                        LivingNeighbors += 1 'West
+                        If Me.mCurrentType(x - 1, y) Then TypedNeighbors += 1
+                    End If
+
+                    If y >= yMin AndAlso Me.mCurrentState(x, y - 1) Then
+                        LivingNeighbors += 1 'North
+                        If Me.mCurrentType(x, y - 1) Then TypedNeighbors += 1
+                    End If
+
+                    If y <= yMax AndAlso Me.mCurrentState(x, y + 1) Then
+                        LivingNeighbors += 1 'South
+                        If Me.mCurrentType(x, y + 1) Then TypedNeighbors += 1
+                    End If
+
+                    If (x <= xMax And y >= yMin) AndAlso Me.mCurrentState(x + 1, y - 1) Then
+                        LivingNeighbors += 1 'Northeast
+                        If Me.mCurrentType(x + 1, y - 1) Then TypedNeighbors += 1
+                    End If
+
+                    If (x <= xMax And y <= yMax) AndAlso Me.mCurrentState(x + 1, y + 1) Then
+                        LivingNeighbors += 1 'Southeast
+                        If Me.mCurrentType(x + 1, y + 1) Then TypedNeighbors += 1
+                    End If
+
+                    If (x >= xMin And y >= yMin) AndAlso Me.mCurrentState(x - 1, y - 1) Then
+                        LivingNeighbors += 1 'Northwest
+                        If Me.mCurrentType(x - 1, y - 1) Then TypedNeighbors += 1
+                    End If
+
+                    If (x >= xMin And y <= yMax) AndAlso Me.mCurrentState(x - 1, y + 1) Then
+                        LivingNeighbors += 1 'Southwest
+                        If Me.mCurrentType(x - 1, y + 1) Then TypedNeighbors += 1
+                    End If
+
+
+                    'Find out of the cell will live or die
+                    If Me.mCurrentState(x, y) Then  'Current cell is ALIVE
+
+                        Me.mFutureState(x, y) = False
+                        For Each i As Integer In Me.mSurviveNeighbors
+                            If i = LivingNeighbors Then
+                                Me.mFutureState(x, y) = True
+                                Exit For
+                            End If
+                        Next
+
+                        If Me.mFutureState(x, y) Then mLivingCells += 1
+                    Else                            'Current cell is DEAD
+                        Me.mFutureState(x, y) = False
+                        For Each i As Integer In Me.mBirthNeighbors
+                            If i = LivingNeighbors Then
+                                Me.mFutureState(x, y) = True
+                                Exit For
+                            End If
+                        Next
+
+                        If Me.mFutureState(x, y) Then mLivingCells += 1
+                        'Decide what Type (Color) the newborn will be.  
+                        Me.mFutureType(x, y) = (TypedNeighbors >= 2)
+
+                    End If
+                    Application.DoEvents()
+                Next
+                Application.DoEvents()
+            Next
+
+            'Make the future state the new current state
+            'For x As Integer = 0 To xMax
+            '    For y As Integer = 0 To yMax
+            '        Me.mCurrentState(x, y) = Me.mFutureState(x, y)
+            '    Next
+            'Next
+            CopyArray(Me.mFutureState, Me.mCurrentState)
+        End While
+    End Sub
+
     'The Simulate routine calls itself upon completion, until the mStopped variable is set to true
     Friend Sub Simulate(Optional CurrentState As Boolean(,) = Nothing, Optional CurrentType As Boolean(,) = Nothing)
 
@@ -64,140 +195,11 @@ Public Class Universe
             CopyArray(CurrentType, Me.mCurrentType)
         End If
 
-        'If our population has been stable for at least N generations, then stop the simulation
-        CurrentPopulation = 0
-        PriorPopulation = 0
-        Stable = True
 
-        If (Me.mGenerationStabilityIndicator = 0) Then
-            Stable = False
-
-        ElseIf Me.mLivingCellList.Count > Me.mGenerationStabilityIndicator Then
-            For i As Integer = Me.mLivingCellList.Count - 1 To Me.mLivingCellList.Count - Me.mGenerationStabilityIndicator Step -1
-                CurrentPopulation = Me.mLivingCellList(i)
-                If (CurrentPopulation <> PriorPopulation And PriorPopulation <> 0) Then
-                    Stable = False
-                End If
-                PriorPopulation = CurrentPopulation
-            Next
-        Else
-            Stable = False
-        End If
-        If Stable Then
-            Me.mStopped = True
-            Exit Sub
-        End If
-
-
-        'Let the calling application render the output of the CurrentState and CurrentType
-        RaiseEvent Tick(Me.mCurrentState, Me.mCurrentType, Me.mLivingCells)
-        Me.mLivingCellList.Add(Me.mLivingCells)
-
-
-        xMin = 1
-        yMin = 1
-        xMax = Me.mCurrentState.GetLength(0) - 2
-        yMax = Me.mCurrentState.GetLength(1) - 2
-
-        mLivingCells = 0
-
-        'Let's see if the cells live or die
-        For x As Integer = 0 To xMax
-            For y As Integer = 0 To yMax
-
-                'Count the number of neighbors that are alive
-                LivingNeighbors = 0
-                TypedNeighbors = 0
-
-                If x <= xMax AndAlso Me.mCurrentState(x + 1, y) Then
-                    LivingNeighbors += 1 'East
-                    If Me.mCurrentType(x + 1, y) Then TypedNeighbors += 1
-                End If
-
-                If x >= xMin AndAlso Me.mCurrentState(x - 1, y) Then
-                    LivingNeighbors += 1 'West
-                    If Me.mCurrentType(x - 1, y) Then TypedNeighbors += 1
-                End If
-
-                If y >= yMin AndAlso Me.mCurrentState(x, y - 1) Then
-                    LivingNeighbors += 1 'North
-                    If Me.mCurrentType(x, y - 1) Then TypedNeighbors += 1
-                End If
-
-                If y <= yMax AndAlso Me.mCurrentState(x, y + 1) Then
-                    LivingNeighbors += 1 'South
-                    If Me.mCurrentType(x, y + 1) Then TypedNeighbors += 1
-                End If
-
-                If (x <= xMax And y >= yMin) AndAlso Me.mCurrentState(x + 1, y - 1) Then
-                    LivingNeighbors += 1 'Northeast
-                    If Me.mCurrentType(x + 1, y - 1) Then TypedNeighbors += 1
-                End If
-
-                If (x <= xMax And y <= yMax) AndAlso Me.mCurrentState(x + 1, y + 1) Then
-                    LivingNeighbors += 1 'Southeast
-                    If Me.mCurrentType(x + 1, y + 1) Then TypedNeighbors += 1
-                End If
-
-                If (x >= xMin And y >= yMin) AndAlso Me.mCurrentState(x - 1, y - 1) Then
-                    LivingNeighbors += 1 'Northwest
-                    If Me.mCurrentType(x - 1, y - 1) Then TypedNeighbors += 1
-                End If
-
-                If (x >= xMin And y <= yMax) AndAlso Me.mCurrentState(x - 1, y + 1) Then
-                    LivingNeighbors += 1 'Southwest
-                    If Me.mCurrentType(x - 1, y + 1) Then TypedNeighbors += 1
-                End If
-
-
-                'Find out of the cell will live or die
-                If Me.mCurrentState(x, y) Then  'Current cell is ALIVE
-                    ''Me.mFutureState(x, y) = (LivingNeighbors = 2 Or LivingNeighbors = 3)
-                    ''Me.mFutureState(x, y) = (LivingNeighbors = 2 Or LivingNeighbors = 1 Or LivingNeighbors = 5)
-                    ''Me.mFutureState(x, y) = (LivingNeighbors = 2 Or LivingNeighbors = 3)
-
-                    Me.mFutureState(x, y) = False
-                    For Each i As Integer In Me.mSurviveNeighbors
-                        If i = LivingNeighbors Then
-                            Me.mFutureState(x, y) = True
-                            Exit For
-                        End If
-                    Next
-
-                    If Me.mFutureState(x, y) Then mLivingCells += 1
-                Else                            'Current cell is DEAD
-                    ''Me.mFutureState(x, y) = (LivingNeighbors = 3)
-                    ''Me.mFutureState(x, y) = (LivingNeighbors = 3 Or LivingNeighbors = 6)
-
-                    Me.mFutureState(x, y) = False
-                    For Each i As Integer In Me.mBirthNeighbors
-                        If i = LivingNeighbors Then
-                            Me.mFutureState(x, y) = True
-                            Exit For
-                        End If
-                    Next
-
-                    If Me.mFutureState(x, y) Then mLivingCells += 1
-                    'Decide what Type (Color) the newborn will be.  
-                    Me.mFutureType(x, y) = (TypedNeighbors >= 2)
-
-                End If
-                Application.DoEvents()
-            Next
-            Application.DoEvents()
-        Next
-
-        'Repeat the simulation
-        Array.Copy(Me.mFutureState, Me.mCurrentState, Me.mCurrentState.Length)
-        Array.Copy(Me.mFutureType, Me.mCurrentType, Me.mCurrentType.Length)
-
-        If Not Me.mStopped Then Simulate()
-
+        Call Me.DoWork()
+        
     End Sub
 
-    Private Sub DoWork(Optional CurrentState As Boolean(,) = Nothing, Optional CurrentType As Boolean(,) = Nothing)
-
-    End Sub
 
     Private Sub CopyArray(ByRef Source(,) As Boolean, ByRef Target(,) As Boolean)
         Dim x As Integer
