@@ -47,7 +47,7 @@ Public Class Universe
     End Sub
     Friend Sub StopSimulation()
         Me.mStopped = True
-        Me.mLivingCellList.Clear()
+        'Me.mLivingCellList.Clear()
     End Sub
 
     Private Sub DoWork()

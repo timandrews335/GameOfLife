@@ -1,6 +1,6 @@
-﻿Public Class Form1
+﻿Public Class FormMain
     Private WithEvents mUniverse As New Universe(120, 120)
-    Private WithEvents mGrid As New Grid(Color.White, Color.LightSteelBlue, Color.Blue, Color.Red)
+    Private WithEvents mGrid As New UniverseGrid(Color.White, Color.LightSteelBlue, Color.Blue, Color.Red)
     Private mInitialSeed(,) As Boolean
     Private mInitialType(,) As Boolean
     Dim r As New Random
@@ -38,9 +38,9 @@
 
         'Setup
         Me.mGrid.BackColor = Color.Transparent
-        Me.mGrid.Dock = DockStyle.Fill
+        'Me.mGrid.Dock = DockStyle.Fill
         Me.mGrid.Location = New Point(0, 0)
-        Me.GroupBox1.Controls.Add(Me.mGrid)
+        Me.pnlUniverse.Controls.Add(Me.mGrid)
         Me.mGrid.TabIndex = 100
         Me.mGrid.GridBackColor = Me.lbGridBackground.BackColor
         Me.mGrid.GridColor = Me.lbGridLines.BackColor
@@ -65,7 +65,7 @@
     End Sub
 #End Region
 
-
+#Region "Simulation operations"
     'Starts or sets up a Universe, based on user chose settings
     Private Sub StartUniverse()
         Dim InitialSeed(nudCellAxisLength.Value, nudCellAxisLength.Value) As Boolean
@@ -198,8 +198,9 @@
         Me.mUniverse.Simulate(Me.mInitialSeed, Me.mInitialType)
 
     End Sub
+#End Region
 
-
+#Region "Form controls"
     Private Sub btnStop_Click(sender As System.Object, e As System.EventArgs) Handles btnStop.Click
         Me.mUniverse.StopSimulation()
         Me.btnStart.Enabled = True
@@ -240,28 +241,29 @@
         Me.mUniverse.Simulate()
     End Sub
 
-
     Private Sub trkCellSize_Scroll(sender As System.Object, e As System.EventArgs) Handles trkCellSize.Scroll
         Me.mGrid.CellSize = Me.trkCellSize.Value
+
+        'MessageBox.Show(Me.mGrid.Height)
     End Sub
 
-    Private Sub ScrollBar_Scroll(sender As System.Object, e As System.Windows.Forms.ScrollEventArgs) Handles VScrollBar1.Scroll, HScrollBar1.Scroll
-        Dim x As Integer
-        Dim y As Integer
-        If Me.HScrollBar1.Value = 0 Then
-            x = 0
-        Else
-            x = Me.mUniverse.Width * (Me.HScrollBar1.Value / 100.0)
-        End If
-        If Me.VScrollBar1.Value = 0 Then
-            y = 0
-        Else
-            y = Me.mUniverse.Height * (Me.VScrollBar1.Value / 100.0)
-        End If
+    'Private Sub ScrollBar_Scroll(sender As System.Object, e As System.Windows.Forms.ScrollEventArgs) Handles VScrollBar1.Scroll, HScrollBar1.Scroll
+    '    Dim x As Integer
+    '    Dim y As Integer
+    '    If Me.HScrollBar1.Value = 0 Then
+    '        x = 0
+    '    Else
+    '        x = Me.mUniverse.Width * (Me.HScrollBar1.Value / 100.0)
+    '    End If
+    '    If Me.VScrollBar1.Value = 0 Then
+    '        y = 0
+    '    Else
+    '        y = Me.mUniverse.Height * (Me.VScrollBar1.Value / 100.0)
+    '    End If
 
-        Me.mCurrentCoordinates = New Point(x, y)
-        Me.mGrid.CurrentCoordinates = Me.mCurrentCoordinates
-    End Sub
+    '    Me.mCurrentCoordinates = New Point(x, y)
+    '    Me.mGrid.CurrentCoordinates = Me.mCurrentCoordinates
+    'End Sub
 
 
     Private Sub rbSquareCells_CheckedChanged(sender As Object, e As EventArgs) Handles rbSquareCells.CheckedChanged, rbCircularCells.CheckedChanged
@@ -279,5 +281,23 @@
     End Sub
 
 
- 
+    Private Sub btnCollapse_Click(sender As Object, e As EventArgs) Handles btnCollapse.Click
+        If Me.pnlLeft.Width > 0 Then
+            Me.pnlLeft.Width = 0
+            Me.btnCollapse.Text = ">"
+        Else
+            Me.pnlLeft.Width = 250
+            Me.btnCollapse.Text = "<"
+        End If
+    End Sub
+
+    Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
+        Try
+            Me.mUniverse.StopSimulation()
+        Catch ex As Exception
+
+        End Try
+        Me.Close()
+    End Sub
+#End Region
 End Class

@@ -1,10 +1,10 @@
-﻿'The Grid class controls the visual output of the Game of Life.  It draws the background, gridlines and cells if the cells are alive.
+﻿'The UniversGrid class controls the visual output of the Game of Life.  It draws the background, gridlines and cells if the cells are alive.
 'If a cell is alive, it draws the color based on the mColorBoard array.  This is a boolean array since we are allowed to have two
 'different colors for live cells and just one color for dead cells.
 
 'The RefreshBoard routine is important as it is called from the UI when the collection of cells have changed generation.
+Public Class UniverseGrid
 
-Public Class Grid
     Inherits Panel
 
     'This main image represents the grid
@@ -30,9 +30,6 @@ Public Class Grid
     'Pixel size of each cell
     Private mCellSize As Integer = 10
 
-    'Current coordinates to set at the 0,0 position of the grid image.
-    Private mCurrentCoordinates As Point = New Point(0, 0)
-
 
 
 
@@ -46,6 +43,7 @@ Public Class Grid
         Me.mTrueType = TrueType
 
         Me.mBackImage = New Bitmap(Me.Width, Me.Height)
+        Me.mImage = New Bitmap(Me.Width, Me.Height)
 
 
     End Sub
@@ -53,8 +51,14 @@ Public Class Grid
         'MyBase.OnPaintBackground(e)
         Dim g As Graphics = Graphics.FromImage(Me.mBackImage)
         g.Clear(Me.Parent.BackColor)
-        g = Graphics.FromImage(Me.mImage)
-        g.Clear(Me.mBackColor)
+        Try
+            g = Graphics.FromImage(Me.mImage)
+            g.Clear(Me.mBackColor)
+        Catch ex As Exception
+            g = Nothing
+            Exit Sub
+        End Try
+
 
         Dim b As Brush
         Dim TrueBrush As Brush = New SolidBrush(Me.mTrueType)
@@ -70,25 +74,11 @@ Public Class Grid
             Dim wRatio As Double = Me.mImage.Width / Me.mCellSize
             Dim hRatio As Double = Me.mImage.Width / Me.mCellSize
 
-            'How many cells are there in the grid array, including the offset?
-            Dim wCellsInGrid As Integer = Me.mGridBoard.GetLength(0) - 1 - Me.mCurrentCoordinates.X
-            Dim hCellsInGrid As Integer = Me.mGridBoard.GetLength(0) - 1 - Me.mCurrentCoordinates.Y
 
-            Dim AdjustedWidth As Double = wRatio
-            If wCellsInGrid < wRatio Then AdjustedWidth = wCellsInGrid
-
-            Dim AdjustedHeight As Double = hRatio
-            If hCellsInGrid < hRatio Then AdjustedHeight = hCellsInGrid
-
-
-
-            'How many cells can we go wide?
-            For w As Integer = 0 To AdjustedWidth
-
-                For h As Integer = 0 To AdjustedHeight
-
-                    If Me.mGridBoard(w + Me.mCurrentCoordinates.X, h + Me.mCurrentCoordinates.Y) Then 'It is alive
-                        If Me.mColorBoard(w + Me.mCurrentCoordinates.X, h + Me.mCurrentCoordinates.Y) Then
+            For x As Integer = 0 To Me.mGridBoard.GetLength(0) - 1
+                For y As Integer = 0 To Me.mGridBoard.GetLength(0) - 1
+                    If Me.mGridBoard(x, y) Then 'It is alive
+                        If Me.mColorBoard(x, y) Then
                             b = TrueBrush
                         Else
                             b = FalseBrush
@@ -96,19 +86,20 @@ Public Class Grid
                         'Draw the cell
 
                         If Not mCircle Then
-                            g.FillRectangle(b, w * Me.mCellSize, h * Me.mCellSize, Me.mCellSize, Me.mCellSize)
+                            g.FillRectangle(b, x * Me.mCellSize, y * Me.mCellSize, Me.mCellSize, Me.mCellSize)
                         Else
 
-                            g.FillEllipse(b, w * Me.mCellSize, h * Me.mCellSize, Me.mCellSize, Me.mCellSize)
+                            g.FillEllipse(b, x * Me.mCellSize, y * Me.mCellSize, Me.mCellSize, Me.mCellSize)
                         End If
-
                     End If
 
-
                     'Draw a grid-line
-                    g.DrawRectangle(p, w * Me.mCellSize, h * Me.mCellSize, Me.mCellSize, Me.mCellSize)
+                    g.DrawRectangle(p, x * Me.mCellSize, y * Me.mCellSize, Me.mCellSize, Me.mCellSize)
                 Next
             Next
+
+
+
 
 
         End If
@@ -122,6 +113,10 @@ Public Class Grid
     Friend Sub RefreshBoard(GridBoard(,) As Boolean, ColorBoard(,) As Boolean)
         Me.mGridBoard = GridBoard
         Me.mColorBoard = ColorBoard
+        If Not Me.mGridBoard Is Nothing Then
+            Me.Width = Me.mCellSize * Me.mGridBoard.GetLength(0)
+            Me.Height = Me.Width
+        End If
         Me.Invalidate()
     End Sub
 
@@ -178,19 +173,15 @@ Public Class Grid
         End Get
         Set(value As Integer)
             Me.mCellSize = value
+            If Not Me.mGridBoard Is Nothing Then
+                Me.Width = Me.mCellSize * Me.mGridBoard.GetLength(0)
+                Me.Height = Me.Width
+            End If
             Invalidate()
         End Set
     End Property
 
-    Friend Property CurrentCoordinates
-        Get
-            Return Me.mCurrentCoordinates
-        End Get
-        Set(value)
-            Me.mCurrentCoordinates = value
-            Me.Invalidate()
-        End Set
-    End Property
+
     Friend Property Circle As Boolean
         Get
             Return Me.mCircle
@@ -199,4 +190,5 @@ Public Class Grid
             Me.mCircle = value
         End Set
     End Property
+
 End Class
